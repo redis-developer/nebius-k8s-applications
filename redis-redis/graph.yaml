@@ -12,7 +12,12 @@ components:
         values.auth.password: "parameters.authPassword"
         values.persistence.enabled: "parameters.persistenceEnabled"
         values.persistence.size: "parameters.persistenceSize"
+        values.persistence.storageClass: "parameters.persistenceStorageClass"
+        values.service.type: "parameters.serviceType"
+        values.service.port: "parameters.servicePort"
+        values.resources.requests.cpu: "parameters.resourcesRequestsCpu"
         values.resources.requests.memory: "parameters.resourcesRequestsMemory"
+        values.resources.limits.cpu: "parameters.resourcesLimitsCpu"
         values.resources.limits.memory: "parameters.resourcesLimitsMemory"
         values.redis.maxmemory: "parameters.redisMaxmemory"
         values.redis.maxmemoryPolicy: "parameters.redisMaxmemoryPolicy"
@@ -75,9 +80,29 @@ parameters:
     type: "string"
     description: "Value for Helm key 'persistence.size'."
 
+  "persistenceStorageClass":
+    type: "string"
+    description: "Value for Helm key 'persistence.storageClass'."
+
+  "serviceType":
+    type: "string"
+    description: "Value for Helm key 'service.type'."
+
+  "servicePort":
+    type: "string"
+    description: "Value for Helm key 'service.port'."
+
+  "resourcesRequestsCpu":
+    type: "string"
+    description: "Value for Helm key 'resources.requests.cpu'."
+
   "resourcesRequestsMemory":
     type: "string"
     description: "Value for Helm key 'resources.requests.memory'."
+
+  "resourcesLimitsCpu":
+    type: "string"
+    description: "Value for Helm key 'resources.limits.cpu'."
 
   "resourcesLimitsMemory":
     type: "string"
@@ -97,11 +122,18 @@ ui:
     clusterName: "mk8sCluster.name"
     releaseName: "general.appname"
     releaseNamespace: "general.namespace"
-    authEnabled: "auth.enabled"
-    authPassword: "auth.password"
-    persistenceEnabled: "persistence.enabled"
-    persistenceSize: "persistence.size"
-    resourcesRequestsMemory: "resources.requests.memory"
-    resourcesLimitsMemory: "resources.limits.memory"
-    redisMaxmemory: "redis.maxmemory"
-    redisMaxmemoryPolicy: "redis.maxmemoryPolicy"
+    # NOTE: dotted form-field keys must be escaped as 'a\\.b' because the input
+    # key name literally contains a dot (it is a flat key, not a nested object).
+    authEnabled: 'auth\\.enabled'
+    authPassword: 'auth\\.password'
+    persistenceEnabled: 'persistence\\.enabled'
+    persistenceSize: 'persistence\\.size'
+    persistenceStorageClass: 'persistence\\.storageClass'
+    serviceType: 'service\\.type'
+    servicePort: 'service\\.port'
+    resourcesRequestsCpu: 'resources\\.requests\\.cpu'
+    resourcesRequestsMemory: 'resources\\.requests\\.memory'
+    resourcesLimitsCpu: 'resources\\.limits\\.cpu'
+    resourcesLimitsMemory: 'resources\\.limits\\.memory'
+    redisMaxmemory: 'redis\\.maxmemory'
+    redisMaxmemoryPolicy: 'redis\\.maxmemoryPolicy'

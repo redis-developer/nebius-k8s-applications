@@ -118,3 +118,6 @@ dependencies:
   version: "9.4.4"
   repository: "oci://registry-1.docker.io/bitnamicharts"
   # Note: images moved from bitnami/ to bitnamilegacy/ on Docker Hub
+- name: redis
+  version: "0.1.0"
+  # dir: redis-redis

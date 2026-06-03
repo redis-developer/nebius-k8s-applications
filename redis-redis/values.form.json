@@ -5,7 +5,12 @@
     "auth.password": "",
     "persistence.enabled": true,
     "persistence.size": "10Gi",
+    "persistence.storageClass": "",
+    "service.type": "ClusterIP",
+    "service.port": "6379",
+    "resources.requests.cpu": "250m",
     "resources.requests.memory": "256Mi",
+    "resources.limits.cpu": "1000m",
     "resources.limits.memory": "1Gi",
     "redis.maxmemory": "512mb",
     "redis.maxmemoryPolicy": "allkeys-lru"
@@ -99,6 +104,57 @@
       },
       "required": false
     },
+    "persistence.storageClass": {
+      "type": "string",
+      "viewSpec": {
+        "type": "base",
+        "layout": "row",
+        "layoutTitle": "Storage class",
+        "layoutDescription": "Kubernetes StorageClass for the data volume. Leave empty to use the cluster default.",
+        "disabled": false
+      },
+      "required": false
+    },
+    "service.type": {
+      "type": "string",
+      "enum": [
+        "ClusterIP",
+        "NodePort",
+        "LoadBalancer"
+      ],
+      "viewSpec": {
+        "type": "select",
+        "layout": "row",
+        "layoutTitle": "Service type",
+        "layoutDescription": "How Redis is exposed. ClusterIP keeps it internal to the cluster.",
+        "disabled": false
+      },
+      "required": false
+    },
+    "service.port": {
+      "type": "string",
+      "pattern": "^[0-9]{2,5}$",
+      "patternError": "port must be a number between 10 and 65535",
+      "viewSpec": {
+        "type": "base",
+        "layout": "row",
+        "layoutTitle": "Service port",
+        "layoutDescription": "TCP port the Redis service listens on. Default is 6379.",
+        "disabled": false
+      },
+      "required": false
+    },
+    "resources.requests.cpu": {
+      "type": "string",
+      "viewSpec": {
+        "type": "base",
+        "layout": "row",
+        "layoutTitle": "CPU request",
+        "layoutDescription": "Guaranteed CPU for the Redis container, e.g. 250m.",
+        "disabled": false
+      },
+      "required": false
+    },
     "resources.requests.memory": {
       "type": "string",
       "viewSpec": {
@@ -106,6 +162,17 @@
         "layout": "row",
         "layoutTitle": "Memory request",
         "layoutDescription": "Guaranteed memory for the Redis container, e.g. 256Mi.",
+        "disabled": false
+      },
+      "required": false
+    },
+    "resources.limits.cpu": {
+      "type": "string",
+      "viewSpec": {
+        "type": "base",
+        "layout": "row",
+        "layoutTitle": "CPU limit",
+        "layoutDescription": "Maximum CPU for the Redis container, e.g. 1000m.",
         "disabled": false
       },
       "required": false
@@ -161,7 +228,12 @@
       "auth.password",
       "persistence.enabled",
       "persistence.size",
+      "persistence.storageClass",
+      "service.type",
+      "service.port",
+      "resources.requests.cpu",
       "resources.requests.memory",
+      "resources.limits.cpu",
       "resources.limits.memory",
       "redis.maxmemory",
       "redis.maxmemoryPolicy"

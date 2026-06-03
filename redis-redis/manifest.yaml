@@ -5,6 +5,7 @@ publisherName: Redis
 ownerName: Redis
 categories:
   - databases
+  - vector-databases
 tariff_type: free
 # Docker images used by the chart. Nebius mirrors these into its own container
 # registry during review and rewrites image.repository accordingly.

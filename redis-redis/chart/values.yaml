@@ -1,0 +1,86 @@
+# Default values for the Redis chart.
+# This is a YAML-formatted file.
+
+# -- Number of Redis StatefulSet replicas. The chart deploys a single
+# standalone Redis server by default. Increasing this is only meaningful with
+# external replication/clustering configuration.
+replicaCount: 1
+
+# Official Redis Docker image.
+# Nebius mirrors this image into its container registry during review and
+# overrides image.repository with something like
+# cr.eu-north1.nebius.cloud/marketplace/<path>/redis
+image:
+  repository: redis
+  tag: "8.8.0"
+  pullPolicy: IfNotPresent
+
+# Authentication settings.
+auth:
+  # -- Enable password authentication (requirepass).
+  enabled: true
+  # -- Password used for authentication. When left empty and auth.enabled is
+  # true, a random password is generated and stored in a Secret. On upgrades
+  # the previously generated password is preserved.
+  password: ""
+
+# Persistence settings. When enabled, a PersistentVolumeClaim is created and
+# mounted at /data so that the append-only file (AOF) survives pod restarts.
+persistence:
+  enabled: true
+  size: "10Gi"
+  # -- StorageClass for the PVC. Empty string uses the cluster default
+  # StorageClass.
+  storageClass: ""
+  accessModes:
+    - ReadWriteOnce
+
+# Redis server tuning. These map directly to redis.conf directives.
+redis:
+  # -- Maximum amount of memory Redis will use for the dataset.
+  maxmemory: "512mb"
+  # -- Eviction policy applied once maxmemory is reached.
+  maxmemoryPolicy: "allkeys-lru"
+
+# Kubernetes Service exposing Redis on port 6379.
+service:
+  type: ClusterIP
+  port: 6379
+
+# Container resource requests and limits.
+resources:
+  requests:
+    memory: "256Mi"
+    cpu: "250m"
+  limits:
+    memory: "1Gi"
+    cpu: "1000m"
+
+# Liveness/readiness probe tuning (probes use `redis-cli ping`).
+probes:
+  liveness:
+    initialDelaySeconds: 20
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 5
+  readiness:
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 5
+
+# Optional overrides.
+nameOverride: ""
+fullnameOverride: ""
+
+imagePullSecrets: []
+podAnnotations: {}
+podSecurityContext:
+  fsGroup: 999
+containerSecurityContext:
+  runAsUser: 999
+  runAsNonRoot: true
+
+nodeSelector: {}
+tolerations: []
+affinity: {}

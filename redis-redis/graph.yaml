@@ -1,0 +1,107 @@
+releaseType: "k8s"
+components:
+  helmchart001:
+    type: "helm_chart"
+    spec:
+      refMap:
+        parentId: "parameters.parentId"
+        clusterId: "components.cluster001.state.result.id"
+        releaseName: "parameters.releaseName"
+        releaseNamespace: "parameters.releaseNamespace"
+        values.auth.enabled: "parameters.authEnabled"
+        values.auth.password: "parameters.authPassword"
+        values.persistence.enabled: "parameters.persistenceEnabled"
+        values.persistence.size: "parameters.persistenceSize"
+        values.resources.requests.memory: "parameters.resourcesRequestsMemory"
+        values.resources.limits.memory: "parameters.resourcesLimitsMemory"
+        values.redis.maxmemory: "parameters.redisMaxmemory"
+        values.redis.maxmemoryPolicy: "parameters.redisMaxmemoryPolicy"
+      componentSpec:
+        productSlug: "nebius/redis"
+    dependencies:
+      components:
+        cluster001:
+
+  cluster001:
+    type: "mk8s_cluster"
+    spec:
+      refMap:
+        api_spec.metadata.parentId: "parameters.parentId"
+        api_spec.metadata.id: "parameters.clusterId"
+        api_spec.metadata.name: "parameters.clusterName"
+      componentSpec:
+        api_spec:
+          metadata:
+            name: "redis-cluster"
+          spec:
+            control_plane:
+              # fill in subnetId with default value in the code
+              endpoints:
+                public_endpoint: {}
+parameters:
+  "parentId":
+    type: "string"
+    description: "The project ID for the Redis deployment."
+
+  "clusterId":
+    type: "string"
+    description: "Existing mk8s cluster ID for the Redis deployment."
+
+  "clusterName":
+    type: "string"
+    description: "Existing mk8s cluster name for the Redis deployment."
+
+  "releaseName":
+    type: "string"
+    description: "Helm release name."
+
+  "releaseNamespace":
+    type: "string"
+    description: "Helm release namespace."
+
+  "authEnabled":
+    type: "string"
+    description: "Value for Helm key 'auth.enabled'."
+
+  "authPassword":
+    type: "string"
+    description: "Value for Helm key 'auth.password'."
+
+  "persistenceEnabled":
+    type: "string"
+    description: "Value for Helm key 'persistence.enabled'."
+
+  "persistenceSize":
+    type: "string"
+    description: "Value for Helm key 'persistence.size'."
+
+  "resourcesRequestsMemory":
+    type: "string"
+    description: "Value for Helm key 'resources.requests.memory'."
+
+  "resourcesLimitsMemory":
+    type: "string"
+    description: "Value for Helm key 'resources.limits.memory'."
+
+  "redisMaxmemory":
+    type: "string"
+    description: "Value for Helm key 'redis.maxmemory'."
+
+  "redisMaxmemoryPolicy":
+    type: "string"
+    description: "Value for Helm key 'redis.maxmemoryPolicy'."
+
+ui:
+  mapping:
+    clusterId: "mk8sCluster.clusterId"
+    clusterName: "mk8sCluster.name"
+    releaseName: "general.appname"
+    releaseNamespace: "general.namespace"
+    authEnabled: "auth.enabled"
+    authPassword: "auth.password"
+    persistenceEnabled: "persistence.enabled"
+    persistenceSize: "persistence.size"
+    resourcesRequestsMemory: "resources.requests.memory"
+    resourcesLimitsMemory: "resources.limits.memory"
+    redisMaxmemory: "redis.maxmemory"
+    redisMaxmemoryPolicy: "redis.maxmemoryPolicy"

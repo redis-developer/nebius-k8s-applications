@@ -1,0 +1,21 @@
+apiVersion: v2
+name: redis
+description: Redis - the world's fastest in-memory data platform for caching, vector search, real-time AI, and NoSQL workloads.
+type: application
+# version is the Helm chart version, appVersion is the Redis server version.
+version: 0.1.0
+appVersion: "8.8.0"
+home: https://redis.io
+icon: https://redis.io/wp-content/uploads/2024/04/Logotype.svg
+keywords:
+  - redis
+  - database
+  - cache
+  - key-value
+  - vector-database
+  - nosql
+sources:
+  - https://github.com/redis/redis
+maintainers:
+  - name: Redis
+    url: https://redis.io

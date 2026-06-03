@@ -1,0 +1,170 @@
+{
+  "type": "object",
+  "defaultValue": {
+    "auth.enabled": true,
+    "auth.password": "",
+    "persistence.enabled": true,
+    "persistence.size": "10Gi",
+    "resources.requests.memory": "256Mi",
+    "resources.limits.memory": "1Gi",
+    "redis.maxmemory": "512mb",
+    "redis.maxmemoryPolicy": "allkeys-lru"
+  },
+  "properties": {
+    "mk8sCluster": {
+      "type": "object",
+      "required": true,
+      "viewSpec": {
+        "type": "mk8s_cluster"
+      }
+    },
+    "general": {
+      "type": "object",
+      "viewSpec": {
+        "type": "base",
+        "layout": "section",
+        "layoutTitle": "General"
+      },
+      "defaultValue": {},
+      "properties": {
+        "appname": {
+          "type": "string",
+          "required": true,
+          "viewSpec": {
+            "type": "base",
+            "layout": "row",
+            "layoutTitle": "Application name"
+          },
+          "defaultValue": "redis"
+        },
+        "namespace": {
+          "type": "string",
+          "required": true,
+          "viewSpec": {
+            "type": "base",
+            "layout": "row",
+            "layoutTitle": "Namespace"
+          },
+          "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?$",
+          "patternError": "namespace must consist of lower case alphanumeric characters or '-', and must start and end with an alphanumeric character (e.g. 'my-name',  or '123-abc', regex used for validation is ^[a-z0-9]([-a-z0-9]*[a-z0-9])?$",
+          "defaultValue": "redis"
+        }
+      }
+    },
+    "auth.enabled": {
+      "type": "boolean",
+      "viewSpec": {
+        "type": "switch",
+        "layout": "row",
+        "layoutTitle": "Enable authentication",
+        "layoutDescription": "Protect Redis with a password (requirepass). Strongly recommended.",
+        "disabled": false
+      }
+    },
+    "auth.password": {
+      "type": "string",
+      "pattern": "^[a-zA-Z0-9-!@#\\$%\\^&*]{8,}$",
+      "viewSpec": {
+        "type": "password",
+        "layout": "row",
+        "layoutTitle": "Password",
+        "layoutDescription": "Leave empty to auto-generate a strong password (stored in a Kubernetes Secret).",
+        "generateRandomValueButton": true,
+        "disabled": false
+      },
+      "required": false
+    },
+    "persistence.enabled": {
+      "type": "boolean",
+      "viewSpec": {
+        "type": "switch",
+        "layout": "row",
+        "layoutTitle": "Enable persistence",
+        "layoutDescription": "Persist data on a PersistentVolume so it survives pod restarts.",
+        "disabled": false
+      }
+    },
+    "persistence.size": {
+      "type": "string",
+      "viewSpec": {
+        "type": "rangeinputpicker",
+        "layout": "row",
+        "layoutTitle": "Disk size",
+        "inputProps": {
+          "suffix": "Gi",
+          "min": 1,
+          "max": 1024
+        },
+        "disabled": false
+      },
+      "required": false
+    },
+    "resources.requests.memory": {
+      "type": "string",
+      "viewSpec": {
+        "type": "base",
+        "layout": "row",
+        "layoutTitle": "Memory request",
+        "layoutDescription": "Guaranteed memory for the Redis container, e.g. 256Mi.",
+        "disabled": false
+      },
+      "required": false
+    },
+    "resources.limits.memory": {
+      "type": "string",
+      "viewSpec": {
+        "type": "base",
+        "layout": "row",
+        "layoutTitle": "Memory limit",
+        "layoutDescription": "Maximum memory for the Redis container, e.g. 1Gi.",
+        "disabled": false
+      },
+      "required": false
+    },
+    "redis.maxmemory": {
+      "type": "string",
+      "viewSpec": {
+        "type": "base",
+        "layout": "row",
+        "layoutTitle": "Redis maxmemory",
+        "layoutDescription": "Maximum dataset memory Redis will use before applying the eviction policy, e.g. 512mb.",
+        "disabled": false
+      },
+      "required": false
+    },
+    "redis.maxmemoryPolicy": {
+      "type": "string",
+      "enum": [
+        "allkeys-lru",
+        "volatile-lru",
+        "allkeys-random",
+        "volatile-random",
+        "volatile-ttl",
+        "noeviction"
+      ],
+      "viewSpec": {
+        "type": "select",
+        "layout": "row",
+        "layoutTitle": "Eviction policy",
+        "disabled": false
+      },
+      "required": false
+    }
+  },
+  "viewSpec": {
+    "type": "base",
+    "layout": "",
+    "order": [
+      "mk8sCluster",
+      "general",
+      "auth.enabled",
+      "auth.password",
+      "persistence.enabled",
+      "persistence.size",
+      "resources.requests.memory",
+      "resources.limits.memory",
+      "redis.maxmemory",
+      "redis.maxmemoryPolicy"
+    ]
+  }
+}

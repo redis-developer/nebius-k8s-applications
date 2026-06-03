@@ -1,0 +1,45 @@
+Redis {{ .Chart.AppVersion }} has been deployed successfully as release "{{ .Release.Name }}".
+
+The full Redis documentation is available at https://redis.io/docs/latest/.
+
+1. Service
+   Redis is reachable inside the cluster at:
+
+     {{ include "redis.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.service.port }}
+
+   Service type: {{ .Values.service.type }}
+
+{{- if .Values.auth.enabled }}
+
+2. Authentication
+   Authentication is ENABLED. Retrieve the password with:
+
+     kubectl get secret --namespace {{ .Release.Namespace }} {{ include "redis.secretName" . }} -o jsonpath="{.data.redis-password}" | base64 -d
+
+{{- else }}
+
+2. Authentication
+   Authentication is DISABLED. Anyone with network access to the service can
+   connect without a password. Enable auth.enabled for production use.
+{{- end }}
+
+3. Connect with redis-cli
+
+   export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ include "redis.name" . }},app.kubernetes.io/instance={{ .Release.Name }}" -o jsonpath="{.items[0].metadata.name}")
+
+   kubectl --namespace {{ .Release.Namespace }} exec -it $POD_NAME -- redis-cli
+{{- if .Values.auth.enabled }}
+   # then authenticate inside the CLI:
+   #   AUTH <password>
+{{- end }}
+
+4. Port-forward to your local machine
+
+   kubectl --namespace {{ .Release.Namespace }} port-forward svc/{{ include "redis.fullname" . }} {{ .Values.service.port }}:{{ .Values.service.port }}
+
+   redis-cli -h 127.0.0.1 -p {{ .Values.service.port }}{{ if .Values.auth.enabled }} -a <password>{{ end }}
+{{- if contains "NodePort" .Values.service.type }}
+
+   (Service type is NodePort: you can also reach Redis on any node's IP at the
+   allocated node port — see `kubectl get svc {{ include "redis.fullname" . }}`.)
+{{- end }}

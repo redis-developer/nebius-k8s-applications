@@ -1,0 +1,24 @@
+# Helm value overrides for deploying Redis on a Compute VM using K3s.
+# Only the values that need to differ from chart/values.yaml are listed here.
+
+# K3s ships with the local-path provisioner as its default StorageClass.
+persistence:
+  enabled: true
+  storageClass: local-path
+  size: "10Gi"
+
+# Expose Redis on a node port so it is reachable on the VM's address.
+service:
+  type: NodePort
+
+# Smaller footprint suited to a single-node VM.
+resources:
+  requests:
+    memory: "128Mi"
+    cpu: "100m"
+  limits:
+    memory: "512Mi"
+    cpu: "500m"
+
+redis:
+  maxmemory: "256mb"

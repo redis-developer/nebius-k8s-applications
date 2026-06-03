@@ -1,0 +1,13 @@
+# Nebius AI marketplace application metadata for Redis.
+slug: redis
+name: Redis
+publisherName: Redis
+ownerName: Redis
+categories:
+  - databases
+tariff_type: free
+# Docker images used by the chart. Nebius mirrors these into its own container
+# registry during review and rewrites image.repository accordingly.
+images:
+  - nameWithRegistry: image.repository
+    tag: image.tag

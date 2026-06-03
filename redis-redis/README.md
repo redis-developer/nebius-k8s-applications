@@ -115,12 +115,12 @@ print(client.get("hello"))  # → world
 
 ## Use cases
 
-- **AI/ML Vector Search**: Store and query vector embeddings for RAG pipelines, semantic search, and recommendation engines
-- **Caching & Session Management**: Sub-millisecond key-value caching for web applications and APIs
-- **Real-time Analytics**: Time series ingestion and aggregation for IoT, monitoring, and telemetry
-- **Full-text Search**: Secondary indexing and querying across hash and JSON documents
-- **Event Streaming**: Lightweight message broker using Redis Streams and Pub/Sub
-- **Rate Limiting & Leaderboards**: Atomic counters, sorted sets, and probabilistic data structures
+- **AI Agents & Agent Memory**: Give AI agents short-term working memory and long-term recall so they can retain session context, user preferences, past decisions, and key facts across turns, sessions, and channels.
+- **Semantic Caching for AI Apps**: Cut LLM cost and latency by storing and reusing responses for semantically similar prompts instead of sending every request back to the model.
+- **Vector Search for RAG and Semantic Retrieval**: Power RAG and semantic retrieval with fast vector search over embeddings so applications can find the most relevant context for each query.
+- **Feature Store for Real-time ML**: Serve machine learning features with sub-millisecond latency for real-time inference while keeping training and serving features consistent across batch, streaming, and real-time pipelines.
+- **Session Management for Modern Apps**: Keep application state fast and responsive for modern user experiences with low-latency session storage built for scale.
+- **Real-time Analytics & Leaderboards**: Ingest, aggregate, and query live data for analytics, telemetry, and leaderboards with the speed needed for real-time applications.
 
 ## Links
 

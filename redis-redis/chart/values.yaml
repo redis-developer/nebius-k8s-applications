@@ -62,8 +62,18 @@ resources:
     memory: "1Gi"
     cpu: "1000m"
 
-# Liveness/readiness probe tuning (probes use `redis-cli ping`).
+# Probe tuning (all probes use `redis-cli ping`).
 probes:
+  # The startup probe gates liveness/readiness until Redis has finished coming
+  # up. This matters when persistence is enabled: on restart with a large
+  # append-only file (AOF), Redis can take a while to replay it and will fail
+  # ping until done. The generous failure window below (~5 min) prevents the
+  # liveness probe from killing the pod mid-recovery.
+  startup:
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 30
   liveness:
     initialDelaySeconds: 20
     periodSeconds: 10

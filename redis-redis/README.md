@@ -1,20 +1,20 @@
 ## Description
 
-Redis is the world's fastest in-memory data platform for caching, vector search, real-time AI, and NoSQL databases. Redis 8.8 includes built-in search and query capabilities, vector similarity search, JSON document storage, time series, and probabilistic data structures — all in a single, unified server.
+Redis is the world's fastest in-memory data platform for caching, vector search, real-time context for AI, and modern data workloads. Redis 8.8 brings search, vector similarity search, JSON, time series, and probabilistic data structures together in a single server, so you can build fast apps without stitching together multiple databases.
 
 Key capabilities:
 - Sub-millisecond latency for caching and session management
-- Vector similarity search for AI/ML applications (RAG, semantic search, recommendations)
+- Vector similarity search for AI apps, including RAG, semantic search, and recommendations
 - Full-text search and secondary indexing
 - JSON document storage with JSONPath query support
 - Time series data with downsampling and aggregation
-- Probabilistic data structures (Bloom filters, Count-Min Sketch, Top-K, HyperLogLog)
+- Probabilistic data structures, including Bloom filters, Count-Min Sketch, Top-K, and HyperLogLog
 - Streams for event-driven architectures
 - Pub/Sub messaging
 
 ## Short description
 
-Redis is the world's fastest in-memory data platform for caching, vector search, real-time AI, and NoSQL workloads. Deploy Redis 8.8 with built-in search, JSON, time series, and vector capabilities on Kubernetes.
+Redis is the world's fastest in-memory data platform for caching, vector search, real-time context for AI, and modern data workloads. Run Redis 8.8 on Kubernetes with built-in search, JSON, time series, and vector capabilities.
 
 ## Tutorial
 

@@ -14,7 +14,7 @@ data:
     appendonly yes
     maxmemory {{ .Values.redis.maxmemory }}
     maxmemory-policy {{ .Values.redis.maxmemoryPolicy }}
-    {{- if .Values.auth.enabled }}
+    {{- if eq (include "redis.isTrue" .Values.auth.enabled) "true" }}
     # The password itself is never stored in this ConfigMap. It is provided by
     # the Secret {{ include "redis.secretName" . }}, mounted as a file and pulled
     # in here via the `include` directive so requirepass is set without exposing

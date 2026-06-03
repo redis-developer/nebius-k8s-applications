@@ -24,6 +24,12 @@ auth:
   # the previously generated password is preserved.
   password: ""
 
+# -- Safety override. By default the chart refuses to render when authentication
+# is disabled AND the Service is exposed via NodePort/LoadBalancer, since that
+# leaves Redis reachable from outside the cluster with no password. Set this to
+# true only if you fully understand and accept that risk.
+dangerouslyAllowUnauthenticatedExternalAccess: false
+
 # Persistence settings. When enabled, a PersistentVolumeClaim is created and
 # mounted at /data so that the append-only file (AOF) survives pod restarts.
 persistence:

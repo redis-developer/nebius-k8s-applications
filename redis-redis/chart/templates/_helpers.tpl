@@ -85,3 +85,36 @@ Precedence:
 {{- end -}}
 {{- end -}}
 {{- end -}}
+
+{{/*
+Normalize a boolean-ish value to "true" or "" (empty).
+
+The Nebius marketplace passes graph parameters as STRINGS, so a toggle set to
+false arrives as the string "false" — which is truthy in Go templates. Pass the
+value as the context and test the result with `eq ... "true"`, e.g.:
+  {{- if eq (include "redis.isTrue" .Values.auth.enabled) "true" }}
+This works whether the value is a real bool (true/false) or a string
+("true"/"false", any case).
+*/}}
+{{- define "redis.isTrue" -}}
+{{- if kindIs "bool" . -}}
+{{- ternary "true" "" . -}}
+{{- else -}}
+{{- ternary "true" "" (eq (lower (toString .)) "true") -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Guardrails. Rendered (and therefore evaluated) from statefulset.yaml.
+Fails the render early with a clear message for unsafe configurations.
+*/}}
+{{- define "redis.validate" -}}
+{{- if ne (int .Values.replicaCount) 1 -}}
+{{- fail "This Redis chart is standalone-only and supports replicaCount=1. Multiple replicas would share a single RWO PVC (risking data corruption) or diverge behind one Service. For HA use Redis Sentinel/Cluster, which this chart does not provide." -}}
+{{- end -}}
+{{- $authOn := eq (include "redis.isTrue" .Values.auth.enabled) "true" -}}
+{{- $override := eq (include "redis.isTrue" .Values.dangerouslyAllowUnauthenticatedExternalAccess) "true" -}}
+{{- if and (not $authOn) (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not $override) -}}
+{{- fail "Refusing to expose Redis externally without authentication: auth.enabled is false and service.type is NodePort/LoadBalancer. Enable auth, use service.type=ClusterIP, or explicitly set dangerouslyAllowUnauthenticatedExternalAccess=true to override." -}}
+{{- end -}}
+{{- end -}}

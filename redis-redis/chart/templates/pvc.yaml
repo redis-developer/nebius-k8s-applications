@@ -1,4 +1,4 @@
-{{- if .Values.persistence.enabled }}
+{{- if eq (include "redis.isTrue" .Values.persistence.enabled) "true" }}
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
